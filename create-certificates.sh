@@ -76,15 +76,20 @@ fi
 # Generate a key and certificate pair using our Certificate Authority
 
 CA_NAME=$(cat "${CA_BASE_PATH}-name.txt")
-echo "Generate an SSL certificate using your Certificate Authority."
-echo "Enter one or more DNS names, space-separated, wildcards are allowed."
-echo "e.g: localhost *.local *.example.local"
 
-read -p "DNS names: " DNS_NAMES
+DNS_NAMES="$*"
 if [ -z "$DNS_NAMES" ]
 then
-  echo "Aborting" >&2
-  exit 1
+  echo "Generate an SSL certificate using your Certificate Authority."
+  echo "Enter one or more DNS names, space-separated, wildcards are allowed."
+  echo "e.g: localhost *.local *.example.local"
+
+  read -p "DNS names: " DNS_NAMES
+  if [ -z "$DNS_NAMES" ]
+  then
+    echo "Aborting" >&2
+    exit 1
+  fi
 fi
 
 read -a DOMAINS <<< "$DNS_NAMES"
